@@ -10,6 +10,9 @@ CORS(app)
 # Charger les données depuis le fichier JSON
 with open("lignes_ddd.json", "r") as f:
     lignes = json.load(f)
+	
+with open("arrets.json", "r") as f:
+	arrets = json.load(f)
 
 @app.route("/")
 def accueil():
@@ -25,19 +28,6 @@ def get_lignes():
     return jsonify(lignes)
 	
 
-@app.route("/arrets")
-def get_arrets():
-
-    arrets = set()
-
-    for ligne in lignes:
-
-        for arret in ligne["listeArrets"]:
-
-            arrets.add(arret)
-
-    return jsonify(list(arrets))
-	
 @app.route("/lignes/<int:ligne_id>")
 def get_ligne(ligne_id):
 
@@ -95,6 +85,12 @@ def recherche_lignes():
     ]
 
     return jsonify(resultats)
+	
+@app.route("/arrets")
+def get_arrets():
+
+    return jsonify(arrets)
+
 if __name__ == "__main__":
 
     app.run(debug=True, port=5000)

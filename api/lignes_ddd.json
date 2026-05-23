@@ -97,5 +97,36 @@
       "HLM",
       "Sandaga"
     ]
-  }
+  },
+  
+  
+{
+  "id": 7,
+  "numero": "30",
+  "depart": "Keur Massar",
+  "arrivee": "Sandaga",
+  "arrets": 20,
+  "listeArrets": [
+    "Keur Massar",
+    "Thiaroye",
+    "Pikine",
+    "HLM",
+    "Sandaga"
+  ]
+},
+
+{
+  "id": 8,
+  "numero": "45",
+  "depart": "Rufisque",
+  "arrivee": "Plateau",
+  "arrets": 22,
+  "listeArrets": [
+    "Rufisque",
+    "Bargny",
+    "Thiaroye",
+    "Colobane",
+    "Plateau"
+  ]
+}
 ]

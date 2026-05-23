@@ -7,6 +7,7 @@ import Recherche from "./Recherche";
 import LigneBus from "./LigneBus";
 import DetailLigne from "./DetailLigne";
 import Footer from "./Footer";
+import Carte from "./Carte";
 
 function App() {
 	
@@ -17,25 +18,49 @@ function App() {
 	const [ligneSelectionnee, setLigneSelectionnee]
 		= useState(null);
 	
+function chargerLignes() {
+
+  setChargement(true);
+
+  fetch("http://localhost:5000/lignes")
+
+    .then(response => {
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Erreur serveur : "
+          + response.status
+        );
+
+      }
+
+      return response.json();
+
+    })
+
+    .then(data => {
+
+      setLignes(data);
+
+      setChargement(false);
+
+    })
+
+    .catch(error => {
+
+      setErreur(error.message);
+
+      setChargement(false);
+
+    });
+
+}
 	useEffect(() => {
-		fetch("http://localhost:5000/lignes")
-		   .then(response => {
-		   	 if (!response.ok)  {
-			 	throw new Error(
-					 "Erreur serveur : " + response.status);
-			 }
-			 return response.json();
-		   })
-		   .then(data => {
-		   	 setLignes(data);
-			   setChargement(false);
-		   })
-		   .catch(error => {
-		   	 setErreur(error.message);
-			   setChargement(false);
-		   });
-		
-	}, []);
+
+  chargerLignes();
+
+  }, []);
 	
 	const lignesFiltrees = lignes.filter(
     (l) =>
@@ -52,19 +77,31 @@ function App() {
 
   function handleClickLigne(ligne) {
 
-    if (
-      ligneSelectionnee &&
-      ligneSelectionnee.id === ligne.id
-    ) {
+  if (
+    ligneSelectionnee &&
+    ligneSelectionnee.id === ligne.id
+  ) {
 
-      setLigneSelectionnee(null);
+    setLigneSelectionnee(null);
 
-    } else {
+  } else {
 
-      setLigneSelectionnee(ligne);
+    fetch(
+      "http://localhost:5000/lignes/"
+      + ligne.id
+    )
 
-    }
+      .then(response => response.json())
+
+      .then(data => {
+
+        setLigneSelectionnee(data);
+
+      });
+
   }
+
+}
   
   // Ecran de chargement
   if (chargement)  {
@@ -107,6 +144,8 @@ function App() {
           valeur={recherche}
           onChange={setRecherche}
         />
+		
+		  <button onClick={chargerLignes}>Recharger</button>
 
         <p className="resultat-recherche">
 
@@ -142,9 +181,9 @@ function App() {
         {ligneSelectionnee && (
           <DetailLigne ligne={ligneSelectionnee} />
         )}
-
+       
+	  <Carte />
       </main>
-
       <Footer />
 
     </div>
