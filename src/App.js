@@ -8,6 +8,8 @@ import LigneBus from "./LigneBus";
 import DetailLigne from "./DetailLigne";
 import Footer from "./Footer";
 import Carte from "./Carte";
+import Meteo from "./Meteo";
+import SignalerIncident from "./SignalerIncident";
 
 function App() {
 	
@@ -139,7 +141,7 @@ function chargerLignes() {
       <Header />
 
       <main className="contenu">
-
+        <Meteo />
         <Recherche
           valeur={recherche}
           onChange={setRecherche}
@@ -183,6 +185,7 @@ function chargerLignes() {
         )}
        
 	  <Carte />
+	  <SignalerIncident />
       </main>
       <Footer />
 

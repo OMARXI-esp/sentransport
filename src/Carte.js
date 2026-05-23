@@ -4,7 +4,9 @@ import {
   MapContainer,
   TileLayer,
   Marker,
-  Popup
+  Popup,
+  Circle,
+  useMap
 } from "react-leaflet";
 
 import L from "leaflet";
@@ -27,6 +29,24 @@ L.Icon.Default.mergeOptions({
 
   shadowUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+
+});
+
+const iconeProche = new L.Icon({
+
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+
+  iconSize: [25, 41],
+
+  iconAnchor: [12, 41],
+
+  popupAnchor: [1, -34],
+
+  shadowSize: [41, 41]
 
 });
 
@@ -74,6 +94,37 @@ function calculerDistance(
   );
 
   return R * c;
+
+}
+
+function BoutonCentrer({
+  positionUtilisateur
+}) {
+
+  const map = useMap();
+
+  function centrer() {
+
+    if (positionUtilisateur) {
+
+      map.setView(
+        positionUtilisateur,
+        15
+      );
+
+    }
+
+  }
+
+  return (
+
+    <button onClick={centrer}>
+
+      Centrer sur ma position
+
+    </button>
+
+  );
 
 }
 
@@ -238,12 +289,28 @@ function Carte() {
           attribution="&copy; OpenStreetMap"
 
         />
+		
+		<BoutonCentrer
+             positionUtilisateur={
+             positionUtilisateur
+             }
+        />
 
         {arrets.map(a => (
 
           <Marker
-            key={a.id}
-            position={[a.lat, a.lon]}
+
+             key={a.id}
+
+		     position={[a.lat, a.lon]}
+
+             icon={
+             arretProche &&
+             arretProche.id === a.id
+             ? iconeProche
+             : new L.Icon.Default()
+        }
+
           >
 
             <Popup>
@@ -269,7 +336,17 @@ function Carte() {
           <Marker
             position={positionUtilisateur}
           >
+         {positionUtilisateur && (
 
+         <Circle
+
+        center={positionUtilisateur}
+
+        radius={500}
+
+        />
+
+)}
             <Popup>
               Vous etes ici
             </Popup>
